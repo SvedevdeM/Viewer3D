@@ -1,19 +1,17 @@
 #ifndef VIEWER_H
 #define VIEWER_H
 
-#include <QMainWindow>
-
-#include <QFileInfo>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QFont>
-#include <QGraphicsItem>
 #include <QGraphicsScene>
 #include <QGraphicsSimpleTextItem>
 #include <QGraphicsView>
 #include <QKeyEvent>
-//#include <QPainter>
-//#include <QPainterPath>
+#include <QMainWindow>
+#include <QOpenGLWidget>
 #include <QPen>
+#include <QtOpenGL>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -29,14 +27,15 @@ class Viewer : public QMainWindow {
   ~Viewer();
 
   void connectSlots();
-  void drawField(); // model
-  void drawStats(); // file, edges, vertices
+  void drawField();  // model
+  void drawStats();  // file, edges, vertices
+  void addText(QFont font, QGraphicsSimpleTextItem *text, int x, int y);
   void keyPressEvent(QKeyEvent *event);
 
-private slots:
+ private slots:
   void openFile();
 
-private:
+ private:
   Ui::Viewer *ui;
   QGraphicsScene *scene;
   int edges = 100;

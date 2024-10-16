@@ -32,13 +32,8 @@ void Viewer::drawField() {
 }
 
 void Viewer::openFile() {
-  QString file = QFileDialog::getOpenFileName(this, tr("Open File"), "/home", tr("Object Files (*.obj)"));
-  QStringList pieces = file.split("/");
-  if (pieces.length() > 5) {
-    QList<QString>::iterator it = ++pieces.begin();
-    filename = QString("/%1/%2/%3. . .%4").arg(*(it++)).arg(*(it++)).arg(*(it++)).arg(*(--pieces.end()));
-  }
-  else filename = file;
+  filename = QFileDialog::getOpenFileName(this, tr("Open File"), "/home",
+                                          tr("Object Files (*.obj)"));
   drawField();
 }
 
@@ -48,18 +43,29 @@ void Viewer::drawStats() {
   font.setFamily("Purisa");
   font.setPixelSize(13);
 
-  auto text = scene->addSimpleText(QString("File: %1").arg(filename));
-  text->setPos(5, 3);
-  text->setFont(font);
-  text->setBrush(Qt::gray);
+  QStringList pieces = filename.split("/");
+  QString formattedName;
+  if (pieces.length() > 5) {
+    QList<QString>::iterator it = ++pieces.begin();
+    formattedName = QString("/%1/%2/%3. . .%4")
+                        .arg(*(it++))
+                        .arg(*(it++))
+                        .arg(*(it++))
+                        .arg(*(--pieces.end()));
+  } else
+    formattedName = filename;
 
+  auto text = scene->addSimpleText(QString("File: %1").arg(formattedName));
+  addText(font, text, 5, 3);
   text = scene->addSimpleText(QString("Edges: %1").arg(QString::number(edges)));
-  text->setPos(5, 35);
-  text->setFont(font);
-  text->setBrush(Qt::gray);
+  addText(font, text, 5, 35);
+  text = scene->addSimpleText(
+      QString("Vertices: %1").arg(QString::number(vertices)));
+  addText(font, text, 5, 55);
+}
 
-  text = scene->addSimpleText(QString("Vertices: %1").arg(QString::number(vertices)));
-  text->setPos(5, 55);
+void Viewer::addText(QFont font, QGraphicsSimpleTextItem *text, int x, int y) {
+  text->setPos(x, y);
   text->setFont(font);
   text->setBrush(Qt::gray);
 }
@@ -67,38 +73,44 @@ void Viewer::drawStats() {
 void Viewer::keyPressEvent(QKeyEvent *event) {
   switch (event->key()) {
     case Qt::Key_A:
-      if (event->modifiers() == Qt::ShiftModifier) {}
-        // translate clockwise 90
+      if (event->modifiers() == Qt::ShiftModifier) {
+      }
+      // translate clockwise 90
       // else rotate left 90
       break;
     case Qt::Key_W:
-      if (event->modifiers() == Qt::ShiftModifier) {}
-        //scale up
+      if (event->modifiers() == Qt::ShiftModifier) {
+      }
+      // scale up
       // else rotate up 90
       break;
     case Qt::Key_S:
-      if (event->modifiers() == Qt::ShiftModifier) {}
-        // scale down
+      if (event->modifiers() == Qt::ShiftModifier) {
+      }
+      // scale down
       // else rotate down 90
       break;
     case Qt::Key_D:
-      if (event->modifiers() == Qt::ShiftModifier) {}
-        // translate anti-clockwise 90
+      if (event->modifiers() == Qt::ShiftModifier) {
+      }
+      // translate anti-clockwise 90
       // else rotate right 90
       break;
     case Qt::Key_X:
-      if (event->modifiers() == Qt::ShiftModifier) {}
-        // select x axis
+      if (event->modifiers() == Qt::ShiftModifier) {
+      }
+      // select x axis
       break;
     case Qt::Key_Y:
-      if (event->modifiers() == Qt::ShiftModifier) {}
-        // select x axis
+      if (event->modifiers() == Qt::ShiftModifier) {
+      }
+      // select x axis
       break;
     case Qt::Key_Z:
-      if (event->modifiers() == Qt::ShiftModifier) {}
-        // select x axis
+      if (event->modifiers() == Qt::ShiftModifier) {
+      }
+      // select x axis
       break;
   }
   // if changes --> drawField();
 }
-
