@@ -5,16 +5,16 @@
 
 class OpenGLViewer;
 
-class Model
-{
-    friend class OpenGLViewer;
-public:
-    Model(QString &path);
-private:
-    QVector<QString> fileLines;
-    QString path;
-    void loadOBJ();
+class Model {
+  friend class OpenGLViewer;
 
+ public:
+  Model(QString &path);
+
+ private:
+  QVector<QString> fileLines;
+  QString path;
+  void loadOBJ();
 };
 
-#endif // MODEL_H
+#endif  // MODEL_H
