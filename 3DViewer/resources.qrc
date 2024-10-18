@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>cube.obj</file>
-        <file>vshader.vsh</file>
-        <file>fshader.fsh</file>
-        <file>picture.png</file>
-    </qresource>
-</RCC>

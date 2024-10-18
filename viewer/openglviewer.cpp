@@ -1,11 +1,11 @@
-#include "Viewer.h"
+#include "openglviewer.h"
 
-Viewer::Viewer(QWidget *parent, Model *model)
+OpenGLViewer::OpenGLViewer(QWidget *parent, Model *model)
     : QOpenGLWidget{parent}, m_texture(0), m_indexBuffer(QOpenGLBuffer::IndexBuffer), m(model)
 {
 }
 
-/*virtual*/void  Viewer::initializeGL()
+/*virtual*/void  OpenGLViewer::initializeGL()
 {
     glClearColor(10, 0, 1, 0);
     glEnable(GL_DEPTH_TEST);
@@ -14,14 +14,14 @@ Viewer::Viewer(QWidget *parent, Model *model)
     dataProcessing();
 }
 
-/*virtual*/void Viewer::resizeGL(int nWidth, int nHeight)
+/*virtual*/void OpenGLViewer::resizeGL(int nWidth, int nHeight)
 {
     float aspect = nWidth/(float) nHeight;
     projectMatrix.setToIdentity();
     projectMatrix.perspective(45, aspect, 0.1f, 80.0f);
 }
 
-/*virtual*/void Viewer::paintGL()
+/*virtual*/void OpenGLViewer::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     QMatrix4x4 modelViewMatrix;
@@ -52,7 +52,7 @@ Viewer::Viewer(QWidget *parent, Model *model)
     glDrawElements(GL_TRIANGLES, m_indexBuffer.size(), GL_UNSIGNED_INT, 0);
 }
 
-void Viewer::dataProcessing()
+void OpenGLViewer::dataProcessing()
 {
     QVector< QVector3D > vertices;
     QVector< QVector2D > uvs;
@@ -86,18 +86,18 @@ void Viewer::dataProcessing()
     m_indexBuffer.allocate(indexes.constData(), indexes.size()*sizeof(GLuint));
     m_indexBuffer.release();
 
-    m_texture = new QOpenGLTexture(QImage(":/picture.png").mirrored());
+    m_texture = new QOpenGLTexture(QImage(QFileInfo("../viewer/picture.png").absoluteFilePath()).mirrored());
     return;
 }
 
-void Viewer::initShaders()
+void OpenGLViewer::initShaders()
 {
-    m_program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vshader.vsh");
-    m_program.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/fshader.fsh");
+    m_program.addShaderFromSourceFile(QOpenGLShader::Vertex, QFileInfo("../viewer/vshader.vsh").absoluteFilePath());
+    m_program.addShaderFromSourceFile(QOpenGLShader::Fragment, QFileInfo("../viewer/fshader.fsh").absoluteFilePath());
     m_program.link();
 }
 
-Viewer::~Viewer()
+OpenGLViewer::~OpenGLViewer()
 {
     if(m_texture != nullptr)delete(m_texture);
 }

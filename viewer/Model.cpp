@@ -7,7 +7,7 @@ Model::Model(QString &p): path(p)
 }
 void Model::loadOBJ()
 {
-    QFile file(path);
+    QFile file(QFileInfo(path).absoluteFilePath());
     if(!file.exists())
     {
         qDebug() << "file not found";

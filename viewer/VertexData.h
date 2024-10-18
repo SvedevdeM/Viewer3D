@@ -13,6 +13,17 @@
 #include<QOpenGLShaderProgram>
 #include <QOpenGLTexture>
 #include <QOpenGLBuffer>
+#include <QFileInfo>
+#include <QFileDialog>
+#include <QFont>
+#include <QGraphicsScene>
+#include <QGraphicsSimpleTextItem>
+#include <QGraphicsView>
+#include <QKeyEvent>
+#include <QMainWindow>
+#include <QPen>
+#include <QtOpenGL>
+
 
 struct VertexData
 {

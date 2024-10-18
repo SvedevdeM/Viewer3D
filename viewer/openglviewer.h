@@ -1,16 +1,16 @@
-#ifndef VIEWER_H
-#define VIEWER_H
+#ifndef OpenGLViewer_H
+#define OpenGLViewer_H
 
 #include "VertexData.h"
 #include "Model.h"
 
 
-class Viewer : public QOpenGLWidget
+class OpenGLViewer : public QOpenGLWidget
 {
     Q_OBJECT
 public:
-    explicit Viewer(QWidget *parent, Model *model);
-    ~Viewer();
+    explicit OpenGLViewer(QWidget *parent, Model *model);
+    ~OpenGLViewer();
 protected:
     virtual void initializeGL( ) ;
     virtual void resizeGL (int nWidth, int nHeight);
@@ -28,4 +28,4 @@ private:
     Model *m;
 };
 
-#endif // VIEWER_H
+#endif // OpenGLViewer_H

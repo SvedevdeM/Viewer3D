@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/viewer_icon.png</file>
+        <file>assets/cube.obj</file>
+    </qresource>
+</RCC>

@@ -3,11 +3,11 @@
 
 #include "VertexData.h"
 
-class Viewer;
+class OpenGLViewer;
 
 class Model
 {
-    friend class Viewer;
+    friend class OpenGLViewer;
 public:
     Model(QString &path);
 private:
