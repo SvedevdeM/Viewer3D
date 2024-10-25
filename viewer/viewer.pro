@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     Model.cpp \
+    controller.cpp \
     main.cpp \
     openglviewer.cpp \
     viewer.cpp
@@ -17,13 +18,16 @@ SOURCES += \
 HEADERS += \
     Model.h \
     VertexData.h \
+    controller.h \
     openglviewer.h \
     viewer.h
 
 FORMS += \
     viewer.ui
 
-# LIBS += -lOpengl32
+win32: {
+    LIBS += -lOpengl32
+}
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

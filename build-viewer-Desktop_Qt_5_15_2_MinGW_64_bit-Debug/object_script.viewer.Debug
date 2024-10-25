@@ -1,0 +1,10 @@
+debug/Model.o
+debug/colorselectionwindow.o
+debug/controller.o
+debug/main.o
+debug/openglviewer.o
+debug/viewer.o
+debug/moc_Model.o
+debug/moc_colorselectionwindow.o
+debug/moc_openglviewer.o
+debug/moc_viewer.o

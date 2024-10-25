@@ -1,0 +1,10 @@
+release/Model.o
+release/colorselectionwindow.o
+release/controller.o
+release/main.o
+release/openglviewer.o
+release/viewer.o
+release/moc_Model.o
+release/moc_colorselectionwindow.o
+release/moc_openglviewer.o
+release/moc_viewer.o

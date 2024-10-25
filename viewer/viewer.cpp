@@ -2,10 +2,11 @@
 
 #include "ui_viewer.h"
 
-Viewer::Viewer(QWidget *parent, OpenGLViewer *viewer)
+Viewer::Viewer(QWidget *parent, OpenGLViewer *viewer, Controller *controller)
     : QMainWindow(parent), ui(new Ui::Viewer) {
   ui->setupUi(this);
   glWindow = viewer;
+  c = controller;
   setCentralWidget(glWindow);
 
   dock = new QDockWidget;
@@ -33,6 +34,9 @@ void Viewer::connectSlots() {
   connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
   connect(ui->actionUpload_file, SIGNAL(triggered()), this, SLOT(openFile()));
   connect(ui->actionShow_information, SIGNAL(triggered()), this, SLOT(showInfo()));
+  connect(ui->actionBackground_2, SIGNAL(triggered()), this, SLOT(changeBackground()));
+  connect(ui->actionParallel_2, SIGNAL(triggered()), glWindow, SLOT(setProj()));
+  connect(ui->actionCentral_2, SIGNAL(triggered()), glWindow, SLOT(setProj()));
 }
 
 void Viewer::drawField() {
@@ -44,6 +48,7 @@ void Viewer::drawField() {
 void Viewer::openFile() {
   filename = QFileDialog::getOpenFileName(this, tr("Open File"), "/home",
                                           tr("Object Files (*.obj)"));
+  c->changeFile(filename);
   drawField();
 }
 
@@ -89,47 +94,47 @@ void Viewer::addText(QFont font, QGraphicsSimpleTextItem *text, int x, int y) {
   text->setBrush(Qt::gray);
 }
 
-void Viewer::keyPressEvent(QKeyEvent *event) {
-  switch (event->key()) {
-    case Qt::Key_A:
-      if (event->modifiers() == Qt::ShiftModifier) {
-      }
-      // translate clockwise 90
-      // else rotate left 90
-      break;
-    case Qt::Key_W:
-      if (event->modifiers() == Qt::ShiftModifier) {
-      }
-      // scale up
-      // else rotate up 90
-      break;
+
+
+void Viewer::changeBackground()
+{
+    QColor color = QColorDialog::getColor(Qt::white, this, "Выберите цвет");
+    if (color.isValid())glWindow->setVec3(color.red(), color.green(), color.blue());
+    glWindow->repaint();
+    emit glWindow->changeColorSignal();
+}
+
+void Viewer::keyPressEvent(QKeyEvent *event)  {
+    switch (event->key()) {
     case Qt::Key_S:
-      if (event->modifiers() == Qt::ShiftModifier) {
-      }
-      // scale down
-      // else rotate down 90
-      break;
+        if (event->modifiers() == Qt::ShiftModifier)emit glWindow->scaleModelSignalY(-1);
+        else if(event->modifiers() == Qt::AltModifier)emit glWindow->translateModeleSignalY(-1);
+        else emit glWindow->rotateModelSignalX(1.0);
+        break;
+    case Qt::Key_W:
+        if (event->modifiers() == Qt::ShiftModifier)emit glWindow->scaleModelSignalY(1);
+        else if(event->modifiers() == Qt::AltModifier)emit glWindow->translateModeleSignalY(1);
+        else emit glWindow->rotateModelSignalX(-1.0);
+        break;
+    case Qt::Key_Q:
+        if(event->modifiers() == Qt::ShiftModifier)emit glWindow->scaleModelSignalX(1);
+        else if(event->modifiers() == Qt::AltModifier)emit glWindow->translateModeleSignalZ(-1);
+        else emit glWindow->rotateModelSignalY(-1.0);
+        break;
+    case Qt::Key_E:
+        if(event->modifiers() == Qt::ShiftModifier)emit glWindow->scaleModelSignalX(-1);
+        else if(event->modifiers() == Qt::AltModifier)emit glWindow->translateModeleSignalZ(1);
+        else emit glWindow->rotateModelSignalY(1.0);
+        break;
+    case Qt::Key_A:
+        if(event->modifiers() == Qt::ShiftModifier)emit glWindow->scaleModelSignalZ(1);
+        else if(event->modifiers() == Qt::AltModifier)emit glWindow->translateModeleSignalX(-1);
+        else emit glWindow->rotateModelSignalZ(1.0);
+        break;
     case Qt::Key_D:
-      if (event->modifiers() == Qt::ShiftModifier) {
-      }
-      // translate anti-clockwise 90
-      // else rotate right 90
-      break;
-    case Qt::Key_X:
-      if (event->modifiers() == Qt::ShiftModifier) {
-      }
-      // select x axis
-      break;
-    case Qt::Key_Y:
-      if (event->modifiers() == Qt::ShiftModifier) {
-      }
-      // select x axis
-      break;
-    case Qt::Key_Z:
-      if (event->modifiers() == Qt::ShiftModifier) {
-      }
-      // select x axis
-      break;
-  }
-  // if changes --> drawField();
+        if(event->modifiers() == Qt::ShiftModifier)emit glWindow->scaleModelSignalZ(-1);
+        else if(event->modifiers() == Qt::AltModifier)emit glWindow->translateModeleSignalX(1);
+        else emit glWindow->rotateModelSignalZ(-1.0);
+        break;
+    }
 }

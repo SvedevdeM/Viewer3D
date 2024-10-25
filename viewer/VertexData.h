@@ -23,6 +23,8 @@
 #include <QVector3D>
 #include <QVector>
 #include <QtOpenGL>
+#include <QColorDialog>
+#include <QQuaternion>
 
 struct VertexData {
   VertexData() {}
