@@ -4,7 +4,10 @@
 #include "Model.h"
 #include "VertexData.h"
 
+class Viewer;
+
 class OpenGLViewer : public QOpenGLWidget {
+    friend class Viewer;
     Q_OBJECT
  public:
     explicit OpenGLViewer(QWidget *parent, Model *model);

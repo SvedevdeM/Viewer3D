@@ -41,6 +41,8 @@ void Viewer::connectSlots() {
 
 void Viewer::drawField() {
   scene->clear();
+  edges = (glWindow->vertexes.size() + 1)/2;
+  vertices = glWindow->vertexes.size();
   drawStats();
   view->update();
 }
@@ -82,9 +84,7 @@ void Viewer::drawStats() {
       QString("Vertices: %1").arg(QString::number(vertices)));
   addText(font, text, 5, 55);
   text = scene->addSimpleText(
-      QString("\nRotate 90:\nA  ← D  →\nW  ↑  S  ↓\n\nSelect axis:\nShift+X  "
-              "X\nShift+Y  Y\nShift+Z  Z\n\nTranslate 90:\nShift+A  "
-              "↻\nShift+D  ↺\n\nScale:\nShift+W up\nShift+S down"));
+      QString("Rotate:\n W, A, S, D, Q, E\nTranslate:\n Alt + W, Alt + A, Alt + S, Alt + D\n Alt + Q, Alt + E\n Scale:\n Shift + W, Shift + A,\n Shift + S, Shift + D\n Shift + Q, Shift + E"));
   addText(font, text, 5, 75);
 }
 
@@ -137,4 +137,5 @@ void Viewer::keyPressEvent(QKeyEvent *event)  {
         else emit glWindow->rotateModelSignalZ(-1.0);
         break;
     }
+    drawField();
 }

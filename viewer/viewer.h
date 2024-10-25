@@ -33,8 +33,8 @@ class Viewer : public QMainWindow {
   QGraphicsView *view;
   QGraphicsScene *scene;
   QDockWidget *dock;
-  int edges = 100;
-  int vertices = 300;
+  int edges;
+  int vertices;
   QString filename = QFileInfo("../assets/cube.obj").absoluteFilePath();
   OpenGLViewer *glWindow;
   Controller *c;

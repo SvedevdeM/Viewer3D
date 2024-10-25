@@ -59,7 +59,7 @@ public:
         if (Viewer->objectName().isEmpty())
             Viewer->setObjectName(QString::fromUtf8("Viewer"));
         Viewer->resize(660, 468);
-        Viewer->setStyleSheet(QString::fromUtf8("background-color: rgb(36, 31, 49);"));
+        Viewer->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);"));
         actionUpload_file = new QAction(Viewer);
         actionUpload_file->setObjectName(QString::fromUtf8("actionUpload_file"));
         actionExit = new QAction(Viewer);
@@ -122,7 +122,7 @@ public:
         Viewer->setStatusBar(statusbar);
         menubar = new QMenuBar(Viewer);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 660, 30));
+        menubar->setGeometry(QRect(0, 0, 660, 19));
         menubar->setStyleSheet(QString::fromUtf8("font-family: \"Purisa\";\n"
 "background-color: rgb(192, 191, 188);"));
         menuFile = new QMenu(menubar);

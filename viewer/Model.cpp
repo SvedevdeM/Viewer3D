@@ -10,7 +10,6 @@ void Model::loadOBJ() {
     fileLines.clear();
     QFile file(QFileInfo(path).absoluteFilePath());
     if (!file.exists()) {
-        qDebug() << "file not found";
         return;
     }
     file.open(QIODevice::ReadOnly);

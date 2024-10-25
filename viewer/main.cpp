@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[]) {
   QApplication a(argc, argv);
-  QString path = "../assets/cube.obj";
+  QString path = "";
   Model m(nullptr, path);
   Controller c(nullptr, &m);
   OpenGLViewer v(nullptr, &m);
