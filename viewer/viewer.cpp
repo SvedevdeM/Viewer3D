@@ -28,7 +28,7 @@ void Viewer::loadFont() {
   ui->menubar->setFont(*font);
   ui->menuFile->setFont(*font);
   ui->menuSettings->setFont(*font);
-  ui->menuModel->setFont(*font);
+ // ui->menuModel->setFont(*font);
   ui->menuProjection_type->setFont(*font);
 }
 
