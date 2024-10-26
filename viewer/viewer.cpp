@@ -8,7 +8,31 @@ Viewer::Viewer(QWidget *parent, OpenGLViewer *viewer, Controller *controller)
   glWindow = viewer;
   c = controller;
   setCentralWidget(glWindow);
+  loadFont();
+  viewSetup();
+  connectSlots();
+  drawField();
+}
 
+Viewer::~Viewer() { delete ui; }
+
+void Viewer::loadFont() {
+  QFontDatabase::addApplicationFont(
+      QFileInfo("../assets/purisa_font.ttf").absoluteFilePath());
+  font = new QFont;
+  font->setFamily("Purisa");
+  font->setBold(true);
+  font->setPixelSize(15);
+
+  setFont(*font);
+  ui->menubar->setFont(*font);
+  ui->menuFile->setFont(*font);
+  ui->menuSettings->setFont(*font);
+  ui->menuModel->setFont(*font);
+  ui->menuProjection_type->setFont(*font);
+}
+
+void Viewer::viewSetup() {
   dock = new QDockWidget;
   addDockWidget(Qt::RightDockWidgetArea, dock);
   view = new QGraphicsView;
@@ -18,30 +42,30 @@ Viewer::Viewer(QWidget *parent, OpenGLViewer *viewer, Controller *controller)
   view->setRenderHint(QPainter::Antialiasing, true);
   view->setAlignment(Qt::AlignTop | Qt::AlignLeft);
   auto content = view->contentsRect();
-  view->setSceneRect(0, 0, 150, content.height());
+  view->setSceneRect(0, 0, 200, content.height());
   view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  dock->setWidget(view);
+  view->setFrameShape(QFrame::NoFrame);
+  view->setDragMode(QGraphicsView::RubberBandDrag);
+  view->setStyleSheet("background-color: rgb(36, 31, 49);");
 
-  connectSlots();
-  drawField();
+  dock->setWidget(view);
 }
 
-Viewer::~Viewer() { delete ui; }
-
 void Viewer::connectSlots() {
-  // add more slots for existing actions
   connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
   connect(ui->actionUpload_file, SIGNAL(triggered()), this, SLOT(openFile()));
-  connect(ui->actionShow_information, SIGNAL(triggered()), this, SLOT(showInfo()));
-  connect(ui->actionBackground_2, SIGNAL(triggered()), this, SLOT(changeBackground()));
-  connect(ui->actionParallel_2, SIGNAL(triggered()), glWindow, SLOT(setProj()));
-  connect(ui->actionCentral_2, SIGNAL(triggered()), glWindow, SLOT(setProj()));
+  connect(ui->actionShow_information, SIGNAL(triggered()), this,
+          SLOT(showInfo()));
+  connect(ui->actionBackground, SIGNAL(triggered()), this,
+          SLOT(changeBackground()));
+  connect(ui->actionParallel, SIGNAL(triggered()), glWindow, SLOT(setProj()));
+  connect(ui->actionCentral, SIGNAL(triggered()), glWindow, SLOT(setProj()));
 }
 
 void Viewer::drawField() {
   scene->clear();
-  edges = (glWindow->vertexes.size() + 1)/2;
+  edges = (glWindow->vertexes.size() + 1) / 2;
   vertices = glWindow->vertexes.size();
   drawStats();
   view->update();
@@ -54,16 +78,9 @@ void Viewer::openFile() {
   drawField();
 }
 
-void Viewer::showInfo() {
-  dock->setVisible(true);
-}
+void Viewer::showInfo() { dock->setVisible(true); }
 
 void Viewer::drawStats() {
-  QFont font;
-  font.setBold(true);
-  font.setFamily("Purisa");
-  font.setPixelSize(13);
-
   QStringList pieces = filename.split("/");
   QString formattedName;
   if (pieces.length() > 5) {
@@ -75,67 +92,117 @@ void Viewer::drawStats() {
                         .arg(*(--pieces.end()));
   } else
     formattedName = filename;
-
   auto text = scene->addSimpleText(QString("File: %1").arg(formattedName));
-  addText(font, text, 5, 3);
+  addText(*font, text, 5, 3);
   text = scene->addSimpleText(QString("Edges: %1").arg(QString::number(edges)));
-  addText(font, text, 5, 35);
+  addText(*font, text, 5, 35);
   text = scene->addSimpleText(
       QString("Vertices: %1").arg(QString::number(vertices)));
-  addText(font, text, 5, 55);
+  addText(*font, text, 5, 55);
   text = scene->addSimpleText(
-      QString("Rotate:\n W, A, S, D, Q, E\nTranslate:\n Alt + W, Alt + A, Alt + S, Alt + D\n Alt + Q, Alt + E\n Scale:\n Shift + W, Shift + A,\n Shift + S, Shift + D\n Shift + Q, Shift + E"));
-  addText(font, text, 5, 75);
+      QString("\nControls:\n\n\nRotate:\n\n\nTranslate:\n\n\nScale:"));
+  addText(*font, text, 5, 75);
+  drawControls();
+}
+
+void Viewer::drawControls() {
+  int x = 7, y = 125, size = 20, space = 3;
+  QString buttons[6] = {"Q", "W", "E", "A", "S", "D"};
+  for (int i = 0; i < 6; i++) {
+    addButton(x, y, size, size, buttons[i % 6]);
+    x += size + space;
+    if (x > (size * 3)) {
+      y += size + space;
+      x = 7;
+    }
+  }
+  auto text = scene->addSimpleText("+");
+  addText(*font, text, 50, 275);
+  text = scene->addSimpleText("+");
+  addText(*font, text, 60, 350);
+  addButton(7, 200, size * 4 - 5, size + 5, "Controls");
+  addButton(7, 275, size * 2, size + 5, "Alt");
+  addButton(65, 275, size * 4 - 5, size + 5, "Controls");
+  addButton(7, 350, size * 2 + 10, size + 5, "Shift");
+  addButton(75, 350, size * 4 - 5, size + 5, "Controls");
+}
+
+void Viewer::addButton(int x, int y, int width, int height, QString text) {
+  QPushButton *button = new QPushButton;
+  button->setGeometry(QRect(x, y, width, height));
+  button->setText(text);
+  button->setDisabled(true);
+  button->setStyleSheet(
+      "background-color: transparent; color: rgb(43, 183, 233); font-family: "
+      "'Purisa'; "
+      "border: 1px solid rgb(43, 183, 233); border-radius: 5px;");
+  scene->addWidget(button);
 }
 
 void Viewer::addText(QFont font, QGraphicsSimpleTextItem *text, int x, int y) {
   text->setPos(x, y);
   text->setFont(font);
-  text->setBrush(Qt::gray);
+  text->setBrush(Qt::white);
 }
 
-
-
-void Viewer::changeBackground()
-{
-    QColor color = QColorDialog::getColor(Qt::white, this, "Выберите цвет");
-    if (color.isValid())glWindow->setVec3(color.red(), color.green(), color.blue());
-    glWindow->repaint();
-    emit glWindow->changeColorSignal();
+void Viewer::changeBackground() {
+  QColor color = QColorDialog::getColor(Qt::white, this, "Choose Color");
+  if (color.isValid())
+    glWindow->setVec3(color.red(), color.green(), color.blue());
+  glWindow->repaint();
+  emit glWindow->changeColorSignal();
 }
 
-void Viewer::keyPressEvent(QKeyEvent *event)  {
-    switch (event->key()) {
+void Viewer::keyPressEvent(QKeyEvent *event) {
+  switch (event->key()) {
     case Qt::Key_S:
-        if (event->modifiers() == Qt::ShiftModifier)emit glWindow->scaleModelSignalY(-1);
-        else if(event->modifiers() == Qt::AltModifier)emit glWindow->translateModeleSignalY(-1);
-        else emit glWindow->rotateModelSignalX(1.0);
-        break;
+      if (event->modifiers() == Qt::ShiftModifier)
+        emit glWindow->scaleModelSignalY(-1);
+      else if (event->modifiers() == Qt::AltModifier)
+        emit glWindow->translateModeleSignalY(-1);
+      else
+        emit glWindow->rotateModelSignalX(1.0);
+      break;
     case Qt::Key_W:
-        if (event->modifiers() == Qt::ShiftModifier)emit glWindow->scaleModelSignalY(1);
-        else if(event->modifiers() == Qt::AltModifier)emit glWindow->translateModeleSignalY(1);
-        else emit glWindow->rotateModelSignalX(-1.0);
-        break;
+      if (event->modifiers() == Qt::ShiftModifier)
+        emit glWindow->scaleModelSignalY(1);
+      else if (event->modifiers() == Qt::AltModifier)
+        emit glWindow->translateModeleSignalY(1);
+      else
+        emit glWindow->rotateModelSignalX(-1.0);
+      break;
     case Qt::Key_Q:
-        if(event->modifiers() == Qt::ShiftModifier)emit glWindow->scaleModelSignalX(1);
-        else if(event->modifiers() == Qt::AltModifier)emit glWindow->translateModeleSignalZ(-1);
-        else emit glWindow->rotateModelSignalY(-1.0);
-        break;
+      if (event->modifiers() == Qt::ShiftModifier)
+        emit glWindow->scaleModelSignalX(1);
+      else if (event->modifiers() == Qt::AltModifier)
+        emit glWindow->translateModeleSignalZ(-1);
+      else
+        emit glWindow->rotateModelSignalY(-1.0);
+      break;
     case Qt::Key_E:
-        if(event->modifiers() == Qt::ShiftModifier)emit glWindow->scaleModelSignalX(-1);
-        else if(event->modifiers() == Qt::AltModifier)emit glWindow->translateModeleSignalZ(1);
-        else emit glWindow->rotateModelSignalY(1.0);
-        break;
+      if (event->modifiers() == Qt::ShiftModifier)
+        emit glWindow->scaleModelSignalX(-1);
+      else if (event->modifiers() == Qt::AltModifier)
+        emit glWindow->translateModeleSignalZ(1);
+      else
+        emit glWindow->rotateModelSignalY(1.0);
+      break;
     case Qt::Key_A:
-        if(event->modifiers() == Qt::ShiftModifier)emit glWindow->scaleModelSignalZ(1);
-        else if(event->modifiers() == Qt::AltModifier)emit glWindow->translateModeleSignalX(-1);
-        else emit glWindow->rotateModelSignalZ(1.0);
-        break;
+      if (event->modifiers() == Qt::ShiftModifier)
+        emit glWindow->scaleModelSignalZ(1);
+      else if (event->modifiers() == Qt::AltModifier)
+        emit glWindow->translateModeleSignalX(-1);
+      else
+        emit glWindow->rotateModelSignalZ(1.0);
+      break;
     case Qt::Key_D:
-        if(event->modifiers() == Qt::ShiftModifier)emit glWindow->scaleModelSignalZ(-1);
-        else if(event->modifiers() == Qt::AltModifier)emit glWindow->translateModeleSignalX(1);
-        else emit glWindow->rotateModelSignalZ(-1.0);
-        break;
-    }
-    drawField();
+      if (event->modifiers() == Qt::ShiftModifier)
+        emit glWindow->scaleModelSignalZ(-1);
+      else if (event->modifiers() == Qt::AltModifier)
+        emit glWindow->translateModeleSignalX(1);
+      else
+        emit glWindow->rotateModelSignalZ(-1.0);
+      break;
+  }
+  drawField();
 }

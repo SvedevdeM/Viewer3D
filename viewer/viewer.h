@@ -3,8 +3,8 @@
 
 #include "Model.h"
 #include "VertexData.h"
-#include "openglviewer.h"
 #include "controller.h"
+#include "openglviewer.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,25 +19,31 @@ class Viewer : public QMainWindow {
   Viewer(QWidget *parent, OpenGLViewer *viewer, Controller *controller);
   ~Viewer();
 
+  void loadFont();
+  void viewSetup();
   void connectSlots();
-  void drawField();  // model
-  void drawStats();  // file, edges, vertices
+  void drawField();
+  void drawStats();
+  void drawControls();
   void addText(QFont font, QGraphicsSimpleTextItem *text, int x, int y);
+  void addButton(int x, int y, int width, int height, QString text);
+
  private slots:
   void openFile();
   void showInfo();
   void changeBackground();
   void keyPressEvent(QKeyEvent *event);
+
  private:
   Ui::Viewer *ui;
   QGraphicsView *view;
   QGraphicsScene *scene;
   QDockWidget *dock;
-  int edges;
-  int vertices;
-  QString filename = QFileInfo("../assets/cube.obj").absoluteFilePath();
+  QFont *font;
+  QString filename;
   OpenGLViewer *glWindow;
   Controller *c;
-
+  int edges;
+  int vertices;
 };
 #endif  // VIEWER_H

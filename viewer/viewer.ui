@@ -14,7 +14,8 @@
    <string>3D Viewer</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(255, 255, 255);</string>
+   <string notr="true">background-color: black;
+color:  white;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="sizePolicy">
@@ -33,9 +34,7 @@
     <enum>Qt::LeftToRight</enum>
    </property>
    <property name="styleSheet">
-    <string notr="true">font-family: &quot;Purisa&quot;;
-background-color: rgb(36, 31, 49);
-</string>
+    <string notr="true"/>
    </property>
    <layout class="QGridLayout" name="gridLayout" rowstretch="0,0" columnstretch="0">
     <property name="leftMargin">
@@ -58,8 +57,11 @@ background-color: rgb(36, 31, 49);
       <property name="minimumSize">
        <size>
         <width>400</width>
-        <height>400</height>
+        <height>445</height>
        </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
       </property>
      </widget>
     </item>
@@ -72,85 +74,47 @@ background-color: rgb(36, 31, 49);
      <x>0</x>
      <y>0</y>
      <width>660</width>
-     <height>19</height>
+     <height>22</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">font-family: &quot;Purisa&quot;;
-background-color: rgb(192, 191, 188);</string>
+    <string notr="true">background-color: rgb(36, 31, 49);
+color: white;</string>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="styleSheet">
      <string notr="true">background-color: rgb(36, 31, 49);
-font-size: 14px;
 color: white;
 selection-background-color: rgb(94, 92, 100);</string>
     </property>
     <property name="title">
      <string>File</string>
     </property>
-    <widget class="QMenu" name="menuSave_as">
-     <property name="title">
-      <string>Save as...</string>
-     </property>
-     <addaction name="separator"/>
-     <addaction name="action_bmp"/>
-     <addaction name="action_jpeg"/>
-    </widget>
     <addaction name="actionUpload_file"/>
-    <addaction name="menuSave_as"/>
-    <addaction name="actionMake_screencast"/>
     <addaction name="actionExit"/>
    </widget>
-   <widget class="QMenu" name="menuEdit">
+   <widget class="QMenu" name="menuSettings">
     <property name="styleSheet">
      <string notr="true">background-color: rgb(36, 31, 49);
-font-size: 14px;
-color: white;
-selection-background-color: rgb(94, 92, 100);</string>
-    </property>
-    <property name="title">
-     <string>Edit</string>
-    </property>
-    <addaction name="actionRotate_model_2"/>
-    <addaction name="actionTranslate_model"/>
-    <addaction name="actionScale_model_2"/>
-   </widget>
-   <widget class="QMenu" name="menuSettings_2">
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(36, 31, 49);
-font-size: 14px;
 color: white;
 selection-background-color: rgb(94, 92, 100);</string>
     </property>
     <property name="title">
      <string>Settings</string>
     </property>
-    <widget class="QMenu" name="menuProjection_type_2">
+    <widget class="QMenu" name="menuProjection_type">
      <property name="title">
       <string>Projection type</string>
      </property>
-     <addaction name="actionParallel_2"/>
-     <addaction name="actionCentral_2"/>
+     <addaction name="actionParallel"/>
+     <addaction name="actionCentral"/>
     </widget>
-    <widget class="QMenu" name="menuDisplay_method">
-     <property name="title">
-      <string>Display method</string>
-     </property>
-     <addaction name="actionNone"/>
-     <addaction name="actionCircle"/>
-     <addaction name="actionSquare"/>
-    </widget>
-    <addaction name="actionEdges_2"/>
-    <addaction name="actionVertices_2"/>
-    <addaction name="actionBackground_2"/>
-    <addaction name="menuDisplay_method"/>
-    <addaction name="menuProjection_type_2"/>
+    <addaction name="actionBackground"/>
+    <addaction name="menuProjection_type"/>
     <addaction name="actionShow_information"/>
    </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuEdit"/>
-   <addaction name="menuSettings_2"/>
+   <addaction name="menuSettings"/>
   </widget>
   <action name="actionUpload_file">
    <property name="text">
@@ -226,7 +190,7 @@ selection-background-color: rgb(94, 92, 100);</string>
     <string>Ctrl+I</string>
    </property>
   </action>
-  <action name="actionBackground_2">
+  <action name="actionBackground">
    <property name="text">
     <string>Set background</string>
    </property>
@@ -234,14 +198,20 @@ selection-background-color: rgb(94, 92, 100);</string>
     <string>Ctrl+B</string>
    </property>
   </action>
-  <action name="actionParallel_2">
+  <action name="actionParallel">
    <property name="text">
     <string>Parallel</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
   </action>
-  <action name="actionCentral_2">
+  <action name="actionCentral">
    <property name="text">
     <string>Central</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
    </property>
   </action>
   <action name="actionNone">
@@ -262,6 +232,33 @@ selection-background-color: rgb(94, 92, 100);</string>
   <action name="actionShow_information">
    <property name="text">
     <string>Show information</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="actionRotate">
+   <property name="text">
+    <string>Rotate model</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionTranslate">
+   <property name="text">
+    <string>Translate model</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="actionScale">
+   <property name="text">
+    <string>Scale model</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
  </widget>

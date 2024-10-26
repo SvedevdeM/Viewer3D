@@ -1,10 +1,13 @@
 #ifndef VERTEXDATA_H
 #define VERTEXDATA_H
 
+#include <QColorDialog>
+#include <QDialog>
 #include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QFont>
+#include <QFontDatabase>
 #include <QGLFunctions>
 #include <QGraphicsScene>
 #include <QGraphicsSimpleTextItem>
@@ -18,13 +21,13 @@
 #include <QOpenGLTexture>
 #include <QOpenGLWidget>
 #include <QPen>
+#include <QPushButton>
+#include <QQuaternion>
 #include <QStringList>
 #include <QVector2D>
 #include <QVector3D>
 #include <QVector>
 #include <QtOpenGL>
-#include <QColorDialog>
-#include <QQuaternion>
 
 struct VertexData {
   VertexData() {}
